@@ -10,6 +10,8 @@
 
     <!-- Bootstrap -->
     <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom styles-->
+    <link href="/assets/custom/css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -42,7 +44,7 @@
         {% else %}
         <div class="alert alert-danger" role="alert">
             Hey, we use cookies. Do you accept them? :)
-            <form action="/set-cookie" method="post">
+            <form action="/set-cookie" class="cookie-form" method="post">
                 <button class="btn btn-success btn-xs">I accept</button>
             </form>
         </div>
