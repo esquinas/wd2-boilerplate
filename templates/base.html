@@ -36,7 +36,13 @@
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav><!-- /.navbar -->
+        <div class="alert alert-danger" role="alert">
+            Hey, we use cookies. Do you accept them? :)
+            <form action="/set-cookie" method="post">
+                <button class="btn btn-success btn-xs">I accept</button>
+            </form>
 
+        </div>
         {% block content %}{% endblock content %}
 
     </div>

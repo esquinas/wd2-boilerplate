@@ -31,6 +31,14 @@ class MainHandler(BaseHandler):
     def get(self):
         return self.render_template("main.html")
 
+
+class CookieAlertHandler(BaseHandler):
+    def post(self):
+        self.response.set_cookie(key="cookie_law", value="accepted")
+        return self.redirect_to("main-page")
+
+
 app = webapp2.WSGIApplication([
     webapp2.Route('/', MainHandler, name="main-page"),
+    webapp2.Route('/set-cookie', CookieAlertHandler, name="set-cookie")
 ], debug=True)
