@@ -23,6 +23,12 @@ class BaseHandler(webapp2.RequestHandler):
     def render_template(self, view_filename, params=None):
         if not params:
             params = {}
+
+        cookie_law = self.request.cookies.get("cookie_law")
+
+        if cookie_law:
+            params["cookies"] = True
+
         template = jinja_env.get_template(view_filename)
         return self.response.out.write(template.render(params))
 
