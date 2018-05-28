@@ -38,14 +38,13 @@
         </nav><!-- /.navbar -->
 
         {% if cookies %}
-            <p>Cookies accepted!</p>
+            <!-- Load Google Analytics code here -->
         {% else %}
         <div class="alert alert-danger" role="alert">
             Hey, we use cookies. Do you accept them? :)
             <form action="/set-cookie" method="post">
                 <button class="btn btn-success btn-xs">I accept</button>
             </form>
-
         </div>
         {% endif %}
         {% block content %}{% endblock content %}
