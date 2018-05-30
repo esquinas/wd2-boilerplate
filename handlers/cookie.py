@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from base import BaseHandler
+from handlers.base import BaseHandler
 
 
 class CookieAlertHandler(BaseHandler):
