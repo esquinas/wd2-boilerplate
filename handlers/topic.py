@@ -33,3 +33,9 @@ class TopicAddHandler(BaseHandler):
         new_topic.put()
 
         return self.write("Topic added successfully. :)")
+
+
+class TopicListHandler(BaseHandler):
+    def list(self):
+        qry = Topic.query()
+        return self.render_template('topic_list.html')
