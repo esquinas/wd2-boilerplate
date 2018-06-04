@@ -6,9 +6,21 @@ from models.topic import Topic
 
 class TopicAddHandler(BaseHandler):
     def get(self):
-        return self.render_template('topic_add.html')
+
+        csrf_token = '123abc'
+
+        context = {
+            "csrf_token": csrf_token
+        }
+
+        return self.render_template('topic_add.html', params=context)
 
     def post(self):
+        csrf_token = self.request.get('csrf_token')
+
+        if csrf_token != '123abc':
+            return self.write('This website is protected against CSRF attacks :P')
+
         logged_user = users.get_current_user()
 
         if not logged_user:
