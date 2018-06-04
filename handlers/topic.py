@@ -1,4 +1,6 @@
-from google.appengine.api import users
+import uuid
+
+from google.appengine.api import users, memcache
 
 from handlers.base import BaseHandler
 from models.topic import Topic
@@ -7,7 +9,9 @@ from models.topic import Topic
 class TopicAddHandler(BaseHandler):
     def get(self):
 
-        csrf_token = '123abc'
+        csrf_token = str(uuid.uuid4())
+
+        memcache.add(key=csrf_token, value=True, time=600)
 
         context = {
             "csrf_token": csrf_token
@@ -17,8 +21,9 @@ class TopicAddHandler(BaseHandler):
 
     def post(self):
         csrf_token = self.request.get('csrf_token')
+        mem_token = memcache.get(key=csrf_token)
 
-        if csrf_token != '123abc':
+        if not mem_token:
             return self.write('This website is protected against CSRF attacks :P')
 
         logged_user = users.get_current_user()
