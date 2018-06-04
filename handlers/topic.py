@@ -36,6 +36,9 @@ class TopicAddHandler(BaseHandler):
 
 
 class TopicListHandler(BaseHandler):
-    def list(self):
-        qry = Topic.query()
-        return self.render_template('topic_list.html')
+    def list(self, topic_id):
+        topic = Topic.get_by_id(int(topic_id))
+        context = {
+            "topic": topic,
+        }
+        return self.render_template('topic_list.html', params=context)
