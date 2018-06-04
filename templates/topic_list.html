@@ -8,9 +8,29 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-        <td>1</td>
-        <td>2</td>
+    {% for topic in topics %}
+    <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
+        <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
+        <td>{{ topic.author_email }}</td>
     </tr>
+    {% endfor %}
     </tbody>
 </table>
+
+<script language="JavaScript">
+    clickableRows = document.querySelectorAll('.clickable-row');
+
+    clickableRows.forEach(function(row){
+        row.addEventListener(makeClickable)
+    });
+
+    function makeClickable () {
+
+    }
+
+    // jQuery(document).ready(function($) {
+    // $(".clickable-row").click(function() {
+    //    window.location = $(this).data("href");
+    // });
+});
+</script>
