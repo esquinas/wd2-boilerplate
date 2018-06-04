@@ -20,7 +20,7 @@ class TopicAddHandler(BaseHandler):
         return self.render_template('topic_add.html', params=context)
 
     def post(self):
-        csrf_token = self.request.get('csrf_token')
+        csrf_token = self.request.get('csrf-token')
         mem_token = memcache.get(key=csrf_token)
 
         if not mem_token:
