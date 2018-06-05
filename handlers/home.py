@@ -2,7 +2,6 @@ from handlers.base import BaseHandler
 from models.topic import Topic
 
 class HomeHandler(BaseHandler):
-
     def get(self):
         topics = Topic.query(Topic.deleted == False).fetch()
 
@@ -10,4 +9,4 @@ class HomeHandler(BaseHandler):
             'topics': topics,
         }
 
-        return self.render_template("home.html", params=context)
+        return self.render_template('home.html', params=context)

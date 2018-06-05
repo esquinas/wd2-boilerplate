@@ -18,7 +18,7 @@ class TopicAddHandler(BaseHandler):
         memcache.add(key=csrf_token, value=logged_user.email(), time=600)
 
         context = {
-            "csrf_token": csrf_token
+            'csrf_token': csrf_token
         }
 
         return self.render_template('topic_add.html', params=context)
@@ -59,17 +59,6 @@ class TopicAddHandler(BaseHandler):
         }
 
         return self.redirect_to('topic-details', topic_id=new_topic.key.id(), **flash)
-
-
-class TopicListHandler(BaseHandler):
-    def list(self, topic_id):
-        topic = Topic.get_by_id(int(topic_id))
-
-        context = {
-            'topic': topic,
-        }
-
-        return self.render_template('topic_list.html', params=context)
 
 
 class TopicDetailsHandler(BaseHandler):

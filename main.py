@@ -3,7 +3,7 @@ import webapp2
 
 from handlers.home import HomeHandler
 from handlers.cookie import CookieAlertHandler
-from handlers.topic import TopicAddHandler, TopicListHandler, TopicDetailsHandler
+from handlers.topic import TopicAddHandler, TopicDetailsHandler
 
 # Routes
 app = webapp2.WSGIApplication([
