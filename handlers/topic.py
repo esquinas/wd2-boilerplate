@@ -58,7 +58,6 @@ class TopicAddHandler(BaseHandler):
             'flash_class': 'alert-success',
         }
 
-        #return self.redirect_to('topic-details', topic_id=new_topic.key.id())
         return self.redirect_to('topic-details', topic_id=new_topic.key.id(), **flash)
 
 

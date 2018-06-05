@@ -10,6 +10,5 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/', HomeHandler, name='home-page'),
     webapp2.Route('/set-cookie', CookieAlertHandler, name='set-cookie'),
     webapp2.Route('/topic/add', TopicAddHandler, name='topic-add'),
-    webapp2.Route('/topic/list', TopicListHandler),
     webapp2.Route('/topic/<topic_id:\d+>/details', TopicDetailsHandler, name='topic-details'),
 ], debug=True)
