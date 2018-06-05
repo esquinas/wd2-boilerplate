@@ -8,6 +8,7 @@ from models.comment import Comment
 
 
 class TopicAddHandler(BaseHandler):
+
     def get(self):
         logged_user = users.get_current_user()
 
@@ -19,7 +20,7 @@ class TopicAddHandler(BaseHandler):
         memcache.add(key=csrf_token, value=logged_user.email(), time=600)
 
         context = {
-            'csrf_token': csrf_token
+            'csrf_token': csrf_token,
         }
 
         return self.render_template('topic_add.html', params=context)
@@ -63,15 +64,27 @@ class TopicAddHandler(BaseHandler):
 
 
 class TopicDetailsHandler(BaseHandler):
+
     def get(self, topic_id):
+        logged_user = users.get_current_user()
+
         topic = Topic.get_by_id(int(topic_id))
-        comments =  Comment.query(Comment.deleted == False).fetch()
+
+        comments = Comment.query(Comment.deleted == False).fetch()
+
+        csrf_token = str(uuid.uuid4())
+
+        memcache.add(key=csrf_token, value=logged_user.email(), time=600)
 
         context = {
             'topic': topic,
             'comments': comments,
             'flash_message': self.request.get('flash_message'),
             'flash_class': self.request.get('flash_class'),
+            'csrf_token': csrf_token,
         }
 
         return self.render_template('topic_details.html', params=context)
+
+    def post(self, topic_id):
+        self.write('que ha pachado!?')
