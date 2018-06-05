@@ -53,13 +53,34 @@ class TopicAddHandler(BaseHandler):
 
         new_topic.put()
 
-        return self.write("Topic added successfully. :)")
+        flash = {
+            'flash_message': 'Topic added successfully',
+            'flash_class': 'alert-success',
+        }
+
+        #return self.redirect_to('topic-details', topic_id=new_topic.key.id())
+        return self.redirect_to('topic-details', topic_id=new_topic.key.id(), **flash)
 
 
 class TopicListHandler(BaseHandler):
     def list(self, topic_id):
         topic = Topic.get_by_id(int(topic_id))
+
         context = {
-            "topic": topic,
+            'topic': topic,
         }
+
         return self.render_template('topic_list.html', params=context)
+
+
+class TopicDetailsHandler(BaseHandler):
+    def get(self, topic_id):
+        topic = Topic.get_by_id(int(topic_id))
+
+        context = {
+            'topic': topic,
+            'flash_message': self.request.get('flash_message'),
+            'flash_class': self.request.get('flash_class'),
+        }
+
+        return self.render_template('topic_details.html', params=context)
