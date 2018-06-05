@@ -67,13 +67,15 @@ class TopicDetailsHandler(BaseHandler):
 
     def get(self, topic_id):
         logged_user = users.get_current_user()
+        int_topic_id = int(topic_id)
 
-        topic = Topic.get_by_id(int(topic_id))
+        topic = Topic.get_by_id(int_topic_id)
 
-        comments = Comment.query(Comment.deleted == False).fetch()
+        all_comments = Comment.query(Comment.deleted == False)
+        asorted_topic_comments = all_comments.filter(Comment.topic_id == int_topic_id)
+        comments = asorted_topic_comments.order(Comment.created).fetch()
 
         csrf_token = str(uuid.uuid4())
-
         memcache.add(key=csrf_token, value=logged_user.email(), time=600)
 
         context = {
@@ -85,6 +87,3 @@ class TopicDetailsHandler(BaseHandler):
         }
 
         return self.render_template('topic_details.html', params=context)
-
-    def post(self, topic_id):
-        self.write('que ha pachado!?')
