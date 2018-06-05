@@ -1,7 +1,21 @@
-<div class="panel panel-default">
+{% if comments %}
+
     <div class="panel-group">
-        <div class="panel-body">
-            <p>No comments yet.</p>
+
+    {% for comment in comments %}
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {{ comment.author_email }} commented on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
+            </div>
+            <div class="panel-body">
+                {{ comment.content }}
+            </div>
         </div>
+
+    {% endfor %}
+
     </div>
-</div>
+{% else %}
+    <p>No comments yet.</p>
+{% endif %}

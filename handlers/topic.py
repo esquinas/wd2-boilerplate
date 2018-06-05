@@ -4,6 +4,7 @@ from google.appengine.api import users, memcache
 
 from handlers.base import BaseHandler
 from models.topic import Topic
+from models.comment import Comment
 
 
 class TopicAddHandler(BaseHandler):
@@ -64,9 +65,11 @@ class TopicAddHandler(BaseHandler):
 class TopicDetailsHandler(BaseHandler):
     def get(self, topic_id):
         topic = Topic.get_by_id(int(topic_id))
+        comments =  Comment.query(Comment.deleted == False).fetch()
 
         context = {
             'topic': topic,
+            'comments': comments,
             'flash_message': self.request.get('flash_message'),
             'flash_class': self.request.get('flash_class'),
         }
