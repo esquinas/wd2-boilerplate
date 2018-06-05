@@ -18,19 +18,13 @@
 </table>
 
 <script language="JavaScript">
-    clickableRows = document.querySelectorAll('.clickable-row');
+    var clickableRows = document.querySelectorAll('.clickable-row');
 
-    clickableRows.forEach(function(row){
-        row.addEventListener(makeClickable)
-    });
+    clickableRows.forEach(function (row) {
+        row.addEventListener('click', makeClickable);
+        });
 
     function makeClickable () {
-
+        window.location = this.getAttribute('data-href');
     }
-
-    // jQuery(document).ready(function($) {
-    // $(".clickable-row").click(function() {
-    //    window.location = $(this).data("href");
-    // });
-});
 </script>
