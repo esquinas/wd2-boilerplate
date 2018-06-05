@@ -26,7 +26,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/">Ninja Tech Forum</a>
+              <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-bullhorn"></span> Ninja Tech Forum</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -35,13 +35,13 @@
                 <li><a href="#">About</a></li>
                     {% if logout_url %}
                     <li>
-                        <a href="/topic/add">Add new topic</a>
+                        <a href="/topic/add"><span class="glyphicon glyphicon-plus"></span> Add new topic</a>
                     </li>
                     <li>
-                        <a href="#">{{ user.email() }}</a>
+                        <a href="#"><span class="glyphicon glyphicon-user"></span> {{ user.email() }}</a>
                     </li>
                     <li>
-                        <a href="{{ logout_url }}">Logout</a>
+                        <a href="{{ logout_url }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
                     </li>
                     {% else %}
                     <li>
