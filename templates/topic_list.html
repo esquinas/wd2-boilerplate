@@ -1,23 +1,24 @@
 <h1>Topics</h1>
-
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th class="col-sm-2">Created</th>
-        <th class="col-sm-6">Title</th>
-        <th class="col-sm-4">Author</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for topic in topics %}
-    <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
-        <td>{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
-        <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
-        <td>{{ topic.author_email }}</td>
-    </tr>
-    {% endfor %}
-    </tbody>
-</table>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-2">Created</th>
+            <th class="col-sm-6">Title</th>
+            <th class="col-sm-4">Author</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for topic in topics %}
+        <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
+            <td>{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
+            <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
+            <td>{{ topic.author_email }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <script language="JavaScript">
     var clickableRows = document.querySelectorAll('.clickable-row');
