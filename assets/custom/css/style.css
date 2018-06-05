@@ -11,3 +11,7 @@ body {
   background-color: aliceblue;
 }
 
+.custom-panel-footer {
+  background-color: inherit;
+}
+
