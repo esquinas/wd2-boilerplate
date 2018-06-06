@@ -4,7 +4,7 @@
 
     {% for comment in comments %}
 
-        <div class="panel panel-default">
+        <div class="panel panel-warning">
             <div class="panel-heading">
                 {{ comment.author_email }} commented on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
             </div>
