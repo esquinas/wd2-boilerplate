@@ -39,6 +39,8 @@ class Comment(ndb.Model):
         # Send notification email to topic author.
         taskqueue.add(url='/task/email-new-comment', params=params)
 
+        # hostname = app_identity.get_default_version_hostname()
+
         mail.send_mail(
             sender='esquinas.enrique@gmail.com',
                        to=topic.author_email,
