@@ -21,6 +21,12 @@ class Topic(ndb.Model):
 
         return new_topic
 
-
     # Delete Topics here if admin or author. Also delete its comments.
+    @classmethod
+    def delete(cls, topic_id):
+        topic = Topic.get_by_id(int(topic_id))
+        topic.deleted = True
+        topic.put()
+        return topic
+
     # users.is_current_user_admin()

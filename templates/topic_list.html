@@ -4,8 +4,9 @@
         <thead>
         <tr>
             <th class="col-sm-2">Created</th>
-            <th class="col-sm-6">Title</th>
+            <th class="col-sm-5">Title</th>
             <th class="col-sm-4">Author</th>
+            <th class="col-sm-1">Action</th>
         </tr>
         </thead>
         <tbody>
@@ -15,6 +16,9 @@
             <td>{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
             <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
             <td>{{ topic.author_email }}</td>
+            <td><a class="btn-sm btn-danger" href="/topic/{{ topic.key.id() }}/delete" title="Delete this topic!">
+                <span class="glyphicon glyphicon-remove"></span></a>
+            </td>
         </tr>
         {% endfor %}
         {% if not topics %}
