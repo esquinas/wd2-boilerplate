@@ -9,7 +9,18 @@ class Topic(ndb.Model):
     updated = ndb.DateTimeProperty(auto_now=True)
     deleted = ndb.BooleanProperty(default=False)
 
-    # Create Topics here.
+    @classmethod
+    def create(cls, title, content, author_email):
+        new_topic = cls(
+            title=title,
+            content=content,
+            author_email=author_email,
+        )
+
+        new_topic.put()
+
+        return new_topic
+
 
     # Delete Topics here if admin or author. Also delete its comments.
     # users.is_current_user_admin()

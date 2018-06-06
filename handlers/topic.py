@@ -33,13 +33,11 @@ class TopicAddHandler(BaseHandler):
         if (not text_value) or (not text_value.strip()):
             return self.write('Text field is required!')
 
-        new_topic = Topic(
+        new_topic = Topic.create(
             title=title_value,
             content=text_value,
             author_email=author_email,
         )
-
-        new_topic.put()
 
         flash = {
             'flash_message': 'Topic added successfully',
