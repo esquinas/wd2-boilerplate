@@ -1,7 +1,6 @@
-import uuid
-
 from google.appengine.api import users, memcache
 
+from utils.decorators import validate_csrf
 from handlers.base import BaseHandler
 from models.topic import Topic
 from models.comment import Comment
@@ -15,27 +14,14 @@ class TopicAddHandler(BaseHandler):
         if not logged_user:
             return self.write("Please login before you're allowed to post a topic.")
 
-        csrf_token = str(uuid.uuid4())
+        return self.render_template_with_csrf('topic_add.html')
 
-        memcache.add(key=csrf_token, value=logged_user.email(), time=600)
-
-        context = {
-            'csrf_token': csrf_token,
-        }
-
-        return self.render_template('topic_add.html', params=context)
-
+    @validate_csrf
     def post(self):
         logged_user = users.get_current_user()
 
         if not logged_user:
-            return self.write('Please login to be allowed to post a new topic.')
-
-        csrf_token = self.request.get('csrf-token')
-        mem_token = memcache.get(key=csrf_token)
-
-        if not mem_token or mem_token != logged_user.email():
-            return self.write('This website is protected against CSRF attacks :P')
+            return self.write('Please login to be allowed to post a new Topic.')
 
         title_value = self.request.get('title')
         text_value = self.request.get('text')
@@ -66,7 +52,6 @@ class TopicAddHandler(BaseHandler):
 class TopicDetailsHandler(BaseHandler):
 
     def get(self, topic_id):
-        logged_user = users.get_current_user()
         int_topic_id = int(topic_id)
 
         topic = Topic.get_by_id(int_topic_id)
@@ -75,15 +60,11 @@ class TopicDetailsHandler(BaseHandler):
         asorted_topic_comments = all_comments.filter(Comment.topic_id == int_topic_id)
         comments = asorted_topic_comments.order(Comment.created).fetch()
 
-        csrf_token = str(uuid.uuid4())
-        memcache.add(key=csrf_token, value=logged_user.email(), time=600)
-
         context = {
             'topic': topic,
             'comments': comments,
             'flash_message': self.request.get('flash_message'),
             'flash_class': self.request.get('flash_class'),
-            'csrf_token': csrf_token,
         }
 
-        return self.render_template('topic_details.html', params=context)
+        return self.render_template_with_csrf('topic_details.html', params=context)
