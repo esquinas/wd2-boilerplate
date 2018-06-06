@@ -21,6 +21,7 @@ class BaseHandler(webapp2.RequestHandler):
     def render(self, template, **kw):
         return self.write(self.render_str(template, **kw))
 
+    # TODO: Add generate_csrf_token=Bool flag.
     def render_template(self, view_filename, params=None):
         if not params:
             params = {}
