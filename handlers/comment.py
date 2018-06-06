@@ -21,20 +21,16 @@ class CommentAddHandler(BaseHandler):
             return self.write('Please login to be allowed to post a new comment.')
 
         content = self.request.get('comment')
-        topic_title = topic.title
-        author_email = logged_user.email()
+
 
         if (not content) or (not content.strip()):
             return self.write('Empty comments are not allowed!')
 
-        new_comment = Comment(
+        new_comment = Comment.create(
             content=content,
-            topic_id=int(topic_id),
-            topic_title=topic_title,
-            author_email=author_email,
+            user=logged_user,
+            topic=topic,
         )
-
-        new_comment.put()
 
         flash = {
             'flash_message': 'Comment added successfully',
