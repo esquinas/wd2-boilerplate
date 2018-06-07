@@ -20,13 +20,16 @@
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+              <button type="button" class="navbar-toggle collapsed"
+                      data-toggle="collapse"
+                      data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="/"><span class="glyphicon glyphicon-bullhorn"></span> Ninja Tech Forum</a>
+              <a class="navbar-brand" href="/" title="Home of the Ninja Tech Forum">
+                  <span class="glyphicon glyphicon-bullhorn"></span> Ninja Tech Forum</a>
             </div>
 
             <!-- Collect the nav links, forms, and other content for toggling -->
@@ -35,17 +38,30 @@
                 <li><a href="#">About</a></li>
                     {% if logout_url %}
                     <li>
-                        <a href="/topic/add"><span class="glyphicon glyphicon-plus"></span> Add new topic</a>
+                        <a href="/topic/add" title="Add a new topic">
+                            <span class="glyphicon glyphicon-plus"></span>
+                            <span class="hidden-sm"> Add new topic</span></a>
                     </li>
                     <li>
-                        <a href="#"><span class="glyphicon glyphicon-user"></span> {{ user.email() }}</a>
+                        <a href="/my-comments" title="Read all your Comments">
+                            <span class="glyphicon glyphicon-list-alt"></span>
+                            <span class="hidden-sm"> My Comments</span></a>
                     </li>
                     <li>
-                        <a href="{{ logout_url }}"><span class="glyphicon glyphicon-log-out"></span> Logout</a>
+                        <a href="#" title="Check my user Profile">
+                            <span class="glyphicon glyphicon-user"></span>
+                            <span class="hidden-sm"> {{ user.email() | truncate( 20, True ) }}</span></a>
+                    </li>
+                    <li>
+                        <a href="{{ logout_url }}" title="Log out / Close your session">
+                            <span class="glyphicon glyphicon-log-out"></span>
+                            <span class="hidden-sm"> Logout</span></a>
                     </li>
                     {% else %}
                     <li>
-                        <a href="{{ login_url }}">Login</a>
+                        <a href="{{ login_url }}" title="Log in the Ninja Tech Forum">
+                            <span class="glyphicon glyphicon-log-in"></span>
+                            <span class="hidden-sm"> Login</span></a>
                     </li>
                     {% endif %}
               </ul>
@@ -66,6 +82,7 @@
         {% block content %}{% endblock content %}
 
     </div>
+    <br>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}My comments{% endblock title %}
+
+{% block content %}
+
+<h1>My Comments</h1>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
+            <th class="col-sm-3">Topic</th>
+            <th class="col-sm-7">Comment content</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if comments %}
+        {% for comment in comments %}
+
+        <tr class="clickable-row"
+            data-href="topic/{{ comment.topic_id }}/details#comment-anchor-{{ comment.key.id() }}">
+            <td class="hidden-xs hidden-sm text-muted">{{ comment.created.strftime('%d/%m/%Y, %H:%M') }}</td>
+            <td>
+                <a class="" href="/topic/{{ comment.topic_id }}/details">
+                       {{ comment.topic_title }}
+                </a>
+            </td>
+            <td>
+                {{ comment.content }}
+            </td>
+        </tr>
+        {% endfor %}
+
+    {% else %}
+
+     <tr>
+         <td class="bg-info text-center text-info" colspan="3">
+             <p>You've made <strong>no comments</strong> yet.</p>
+         </td>
+     </tr>
+
+    {% endif %}
+
+    </tbody>
+    </table>
+</div>
+
+ <script language="JavaScript">
+    var clickableRows = document.querySelectorAll('.clickable-row');
+
+    clickableRows.forEach(function (row) {
+         row.addEventListener('click', makeClickable);
+        });
+
+    function makeClickable () {
+        window.location = this.getAttribute('data-href');
+    }
+</script>
+{% endblock content %}

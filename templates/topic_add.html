@@ -8,19 +8,23 @@
     <div class="col-md-6 col-md-offset-3">
         <h1>Add a new topic</h1>
         <form method="post">
+            <p class="text-info">All fields are required</p>
+
             <input type="hidden" name="csrf-token" value="{{ csrf_token }}">
 
             <div class="form-group">
-                <label for="title-input">Title</label>
+                <label for="title-input">Title <span class="text-info">*</span></label>
                 <input id="title-input" type="text" class="form-control" name="title" required>
             </div>
 
             <div class="form-group">
-                <label for="text-textarea">Text</label>
+                <label for="text-textarea">Content <span class="text-info">*</span></label>
                 <textarea id="text-textarea" name="text" class="form-control" rows="6" required></textarea>
             </div>
 
-            <button type="submit" class="btn btn-success">Submit</button>
+            <fieldset class="text-right">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </fieldset>
         </form>
     </div>
 </div>

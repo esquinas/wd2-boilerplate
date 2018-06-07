@@ -57,3 +57,10 @@ class Comment(ndb.Model):
         )
 
         return new_comment
+
+    @classmethod
+    def delete(cls, comment_id):
+        comment = Comment.get_by_id(int(comment_id))
+        comment.deleted = True
+        comment.put()
+        return comment

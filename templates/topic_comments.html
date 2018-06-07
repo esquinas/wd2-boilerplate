@@ -6,7 +6,8 @@
 
         <div class="panel panel-warning">
             <div class="panel-heading">
-                {{ comment.author_email }} commented on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
+                <a name="comment-anchor-{{ comment.key.id() }}"></a>
+                {{ comment.author_email }} commented on the {{ comment.created.strftime('%d/%m/%Y at %H:%M') }}
             </div>
             <div class="panel-body">
                 {{ comment.content }}
@@ -17,5 +18,5 @@
 
     </div>
 {% else %}
-    <p>No comments yet.</p>
+    <p class="text-info">No comments yet.</p>
 {% endif %}

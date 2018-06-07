@@ -6,10 +6,20 @@
 
 {% if flash_message %}
 
-   <div class="alert {{ flash_class }} alert-dismissible">
+   <div class="alert {{ flash_class }}
+               alert-dismissible col-sm-5 col-sm-offset-3 hidden-xs custom-flash-alert js-flash">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
        <p>{{ flash_message }}.</p>
    </div>
+    <script language="JavaScript">
+        // Remove flash alert after 4 seconds.
+        setTimeout(function () {
+          document.querySelector('.js-flash').remove()
+        }, 4000)
+
+        // Remove query parameters from the browser url bar after flash message.
+        history.pushState({}, '', document.location.pathname.concat(document.location.hash));
+    </script>
 
 {% endif %}
 
@@ -17,7 +27,9 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">{{ topic.title }}</h3>
+                <h1 class="panel-title">
+                    <strong>{{ topic.title }}</strong>
+                </h1>
             </div>
 
             <div class="panel-body">
@@ -25,6 +37,19 @@
 
                 <p>{{ topic.content }}</p>
             </div>
+
+            {% if can_make_changes %}
+            <div class="panel-footer text-right">
+                <form id="js-del-form-{{ topic.key.id() }}" action="/topic/{{ topic.key.id() }}/delete" method="post">
+                    <button type="submit"
+                            class="btn btn-danger"
+                            title="Delete this topic!">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Delete
+                    </button>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
