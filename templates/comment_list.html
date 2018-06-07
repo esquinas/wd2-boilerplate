@@ -4,33 +4,58 @@
 
 {% block content %}
 
-    {% if comments %}
-     <div class="col-sm-8 col-sm-offset-2">
+<h1>My Comments</h1>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
+            <th class="col-sm-3">Topic</th>
+            <th class="col-sm-7">Comment content</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% if comments %}
         {% for comment in comments %}
 
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    Topic:
-                    <a class="btn btn-link" href="/topic/{{ comment.topic_id }}/details">
-                       <strong> {{ comment.topic_title }} </strong>
-                    </a>
-                </div>
-                <div class="panel-body">
-                    {{ comment.content }}
-                </div>
-
-                <div class="panel-footer text-muted">
-                    Created on the {{ comment.created.strftime('%d/%m/%Y at %H:%M') }} <br>
-                    Updated on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
-                </div>
-            </div>
-
+        <tr class="clickable-row"
+            data-href="topic/{{ comment.topic_id }}/details#comment-anchor-{{ comment.key.id() }}">
+            <td class="hidden-xs hidden-sm text-muted">{{ comment.created.strftime('%d/%m/%Y, %H:%M') }}</td>
+            <td>
+                <a class="" href="/topic/{{ comment.topic_id }}/details">
+                       {{ comment.topic_title }}
+                </a>
+            </td>
+            <td>
+                {{ comment.content }}
+            </td>
+        </tr>
         {% endfor %}
-    </div>
+
     {% else %}
 
-    <p>You've made no comments yet.</p>
+     <tr>
+         <td class="text-center" colspan="3">
+             <p>You've made no comments yet.</p>
+         </td>
+     </tr>
 
     {% endif %}
 
+    </tbody>
+    </table>
+</div>
+
+ <script language="JavaScript">
+    var clickableRows = document.querySelectorAll('.clickable-row');
+
+    clickableRows.forEach(function (row) {
+         row.addEventListener('click', makeClickable);
+        });
+
+    function makeClickable () {
+        window.location = this.getAttribute('data-href');
+    }
+</script>
 {% endblock content %}
