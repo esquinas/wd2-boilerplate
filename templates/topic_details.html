@@ -6,10 +6,20 @@
 
 {% if flash_message %}
 
-   <div class="alert {{ flash_class }} alert-dismissible">
+   <div class="alert {{ flash_class }}
+               alert-dismissible col-sm-5 col-sm-offset-3 hidden-xs custom-flash-alert js-flash">
         <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
        <p>{{ flash_message }}.</p>
    </div>
+    <script language="JavaScript">
+        // Remove flash alert after 4 seconds.
+        setTimeout(function () {
+          document.querySelector('.js-flash').remove()
+        }, 4000)
+
+        // Remove query parameters from the browser url bar after flash message.
+        history.pushState({}, '', document.location.pathname.concat(document.location.hash));
+    </script>
 
 {% endif %}
 

@@ -68,9 +68,17 @@ class TopicDeleteHandler(BaseHandler):
 class TopicDetailsHandler(BaseHandler):
 
     def get(self, topic_id):
-        int_topic_id = int(topic_id)
+        is_authorized = False
 
+        int_topic_id = int(topic_id)
         topic = Topic.get_by_id(int_topic_id)
+
+        logged_user = users.get_current_user()
+        is_admin = users.is_current_user_admin()
+        is_same_author = normalize_email(topic.author_email) == normalize_email(logged_user.email())
+
+        if is_same_author or is_admin:
+            is_authorized = True
 
         all_comments = Comment.query(Comment.deleted == False)
         asorted_topic_comments = all_comments.filter(Comment.topic_id == int_topic_id)
@@ -79,6 +87,7 @@ class TopicDetailsHandler(BaseHandler):
         context = {
             'topic': topic,
             'comments': comments,
+            'can_make_changes': is_authorized,
             'flash_message': self.request.get('flash_message'),
             'flash_class': self.request.get('flash_class'),
         }
