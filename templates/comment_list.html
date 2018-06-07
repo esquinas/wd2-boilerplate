@@ -24,11 +24,11 @@
             <td class="hidden-xs hidden-sm text-muted">{{ comment.created.strftime('%d/%m/%Y, %H:%M') }}</td>
             <td>
                 <a class="" href="/topic/{{ comment.topic_id }}/details">
-                       {{ comment.topic_title }}
+                       {{ comment.topic_title | truncate(40) }}
                 </a>
             </td>
             <td>
-                {{ comment.content }}
+                {{ comment.content | truncate(240) }}
             </td>
         </tr>
         {% endfor %}

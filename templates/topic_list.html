@@ -18,14 +18,22 @@
 
         {% for topic in topics if topics %}
         <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
-            <td class="hidden-xs hidden-sm">{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
-            <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
+            <td class="hidden-xs hidden-sm text-muted">
+                {{ topic.created.strftime('%d/%m/%Y, %H:%M') }}
+            </td>
+            <td>
+                <a href="topic/{{ topic.key.id() }}/details">
+                {{ topic.title | truncate(80) }}
+                </a>
+            </td>
             <td>{{ topic.author_email }}</td>
 
             {% if can_make_changes %}
 
             <td class="hidden-xs">
-                <form id="js-del-form-{{ topic.key.id() }}" action="/topic/{{ topic.key.id() }}/delete" method="post">
+                <form id="js-del-form-{{ topic.key.id() }}"
+                      action="/topic/{{ topic.key.id() }}/delete"
+                      method="post">
                     <button type="submit"
                             class="btn btn-xs btn-danger hidden-xs"
                             title="Delete this topic!">
@@ -40,7 +48,8 @@
         {% endfor %}
         {% if not topics %}
         <tr class="clickable-row" data-href="topic/add">
-            <td class="bg-info text-center text-info" colspan="4"><p>There are no topics yet. Be a <strong>pioneer</strong> and ...</p>
+            <td class="bg-info text-center text-info" colspan="4">
+                <p>There are no topics yet. Be a <strong>pioneer</strong> and ...</p>
             <a class="btn btn-primary" href="/topic/add">Create a new topic!</a></td>
         </tr>
         {% endif%}
