@@ -1,6 +1,7 @@
 from google.appengine.api import users, memcache
 
 from utils.decorators import validate_csrf
+from utils.helpers import normalize_email
 from handlers.base import BaseHandler
 from models.topic import Topic
 from models.comment import Comment
@@ -50,7 +51,17 @@ class TopicAddHandler(BaseHandler):
 class TopicDeleteHandler(BaseHandler):
 
     def post(self, topic_id):
-        Topic.delete(topic_id)
+        logged_user = users.get_current_user()
+        topic = Topic.get_by_id(int(topic_id))
+
+        is_same_author = normalize_email(topic.author_email) == normalize_email(logged_user.email())
+        is_admin = users.is_current_user_admin()
+
+        if is_same_author or is_admin:
+            Topic.delete(topic_id)
+        else:
+            return self.write("Sorry, you're not allowed to delete this topic.")
+
         return self.redirect_to('home-page')
 
 
