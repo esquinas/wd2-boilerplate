@@ -35,6 +35,19 @@
 
                 <p>{{ topic.content }}</p>
             </div>
+
+            {% if can_make_changes %}
+            <div class="panel-footer text-right">
+                <form id="js-del-form-{{ topic.key.id() }}" action="/topic/{{ topic.key.id() }}/delete" method="post">
+                    <button type="submit"
+                            class="btn btn-danger"
+                            title="Delete this topic!">
+                        <span class="glyphicon glyphicon-trash"></span>
+                        Delete
+                    </button>
+                </form>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
