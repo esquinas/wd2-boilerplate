@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from models.comment import Comment
 
 
 class Topic(ndb.Model):
@@ -27,6 +28,13 @@ class Topic(ndb.Model):
         topic = Topic.get_by_id(int(topic_id))
         topic.deleted = True
         topic.put()
+        topic.__delete_all_comments()
         return topic
 
-    # users.is_current_user_admin()
+    # Private methods.
+    def __delete_all_comments(self):
+        all_comments = Comment.query(Comment.deleted == False)
+        topic_comments = all_comments.filter(Comment.topic_id == self.key.id())
+
+        for comment in topic_comments:
+            Comment.delete(comment.key.id())
