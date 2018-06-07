@@ -47,6 +47,13 @@ class TopicAddHandler(BaseHandler):
         return self.redirect_to('topic-details', topic_id=new_topic.key.id(), **flash)
 
 
+class TopicDeleteHandler(BaseHandler):
+
+    def post(self, topic_id):
+        Topic.delete(topic_id)
+        return self.redirect_to('home-page')
+
+
 class TopicDetailsHandler(BaseHandler):
 
     def get(self, topic_id):

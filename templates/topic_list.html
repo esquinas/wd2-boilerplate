@@ -3,27 +3,33 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th class="col-sm-2">Created</th>
+            <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
             <th class="col-sm-5">Title</th>
             <th class="col-sm-4">Author</th>
-            <th class="col-sm-1">Action</th>
+            <th class="col-sm-1 hidden-xs">Action</th>
         </tr>
         </thead>
         <tbody>
 
         {% for topic in topics if topics %}
         <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
-            <td>{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
+            <td class="hidden-xs hidden-sm">{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
             <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
             <td>{{ topic.author_email }}</td>
-            <td><a class="btn-sm btn-danger" href="/topic/{{ topic.key.id() }}/delete" title="Delete this topic!">
-                <span class="glyphicon glyphicon-remove"></span></a>
+            <td class="hidden-xs">
+                <form id="js-del-form-{{ topic.key.id() }}" action="/topic/{{ topic.key.id() }}/delete" method="post">
+                    <button type="submit"
+                            class="btn btn-xs btn-danger hidden-xs"
+                            title="Delete this topic!">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </form>
             </td>
         </tr>
         {% endfor %}
         {% if not topics %}
         <tr class="clickable-row" data-href="topic/add">
-            <td class="text-center" colspan="3"><p>There are no topics yet.</p>
+            <td class="text-center" colspan="4"><p>There are no topics yet.</p>
             <a class="btn btn-primary" href="/topic/add">Be a pioneer and create a new topic!</a></td>
         </tr>
         {% endif%}
@@ -35,7 +41,7 @@
     var clickableRows = document.querySelectorAll('.clickable-row');
 
     clickableRows.forEach(function (row) {
-        row.addEventListener('click', makeClickable);
+        // row.addEventListener('click', makeClickable);
         });
 
     function makeClickable () {
