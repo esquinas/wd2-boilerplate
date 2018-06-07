@@ -6,7 +6,7 @@
 
         <div class="panel panel-warning">
             <div class="panel-heading">
-                {{ comment.author_email }} commented on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
+                {{ comment.author_email }} commented on the {{ comment.created.strftime('%d/%m/%Y at %H:%M') }}
             </div>
             <div class="panel-body">
                 {{ comment.content }}

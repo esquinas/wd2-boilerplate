@@ -6,7 +6,12 @@
             <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
             <th class="col-sm-5">Title</th>
             <th class="col-sm-4">Author</th>
+
+            {% if can_make_changes %}
+
             <th class="col-sm-1 hidden-xs">Action</th>
+
+            {% endif %}
         </tr>
         </thead>
         <tbody>
@@ -16,6 +21,9 @@
             <td class="hidden-xs hidden-sm">{{ topic.created.strftime('%d/%m/%Y, %H:%M') }}</td>
             <td><a href="topic/{{ topic.key.id() }}/details">{{ topic.title }}</a></td>
             <td>{{ topic.author_email }}</td>
+
+            {% if can_make_changes %}
+
             <td class="hidden-xs">
                 <form id="js-del-form-{{ topic.key.id() }}" action="/topic/{{ topic.key.id() }}/delete" method="post">
                     <button type="submit"
@@ -25,6 +33,9 @@
                     </button>
                 </form>
             </td>
+
+            {% endif %}
+
         </tr>
         {% endfor %}
         {% if not topics %}

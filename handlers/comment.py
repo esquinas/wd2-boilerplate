@@ -40,6 +40,26 @@ class CommentAddHandler(BaseHandler):
         return self.redirect_to('topic-details', topic_id=topic_id, **flash)
 
 
+class CommentListHandler(BaseHandler):
+
+    def get(self):
+        is_admin = users.is_current_user_admin()
+        logged_user = users.get_current_user()
+
+        email = logged_user.email()
+
+        all_comments = Comment.query(Comment.deleted == False)
+        asorted_user_comments = all_comments.filter(Comment.author_email == email)
+        comments = asorted_user_comments.order(Comment.created).fetch()
+
+        context = {
+            'comments': comments,
+            'can_make_changes': is_admin,
+            # 'flash_message': self.request.get('flash_message'),
+            # 'flash_class': self.request.get('flash_class'),
+        }
+
+        return self.render_template('comment_list.html', params=context)
 
 
 

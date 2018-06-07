@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}My comments{% endblock title %}
+
+{% block content %}
+
+    {% if comments %}
+     <div class="col-sm-8 col-sm-offset-2">
+        {% for comment in comments %}
+
+            <div class="panel panel-warning">
+                <div class="panel-heading">
+                    Topic:
+                    <a class="btn btn-link" href="/topic/{{ comment.topic_id }}/details">
+                       <strong> {{ comment.topic_title }} </strong>
+                    </a>
+                </div>
+                <div class="panel-body">
+                    {{ comment.content }}
+                </div>
+
+                <div class="panel-footer text-muted">
+                    Created on the {{ comment.created.strftime('%d/%m/%Y at %H:%M') }} <br>
+                    Updated on the {{ comment.updated.strftime('%d/%m/%Y at %H:%M') }}
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    {% else %}
+
+    <p>You've made no comments yet.</p>
+
+    {% endif %}
+
+{% endblock content %}
