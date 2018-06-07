@@ -60,9 +60,3 @@ class CommentListHandler(BaseHandler):
         }
 
         return self.render_template('comment_list.html', params=context)
-
-
-
-
-
-
