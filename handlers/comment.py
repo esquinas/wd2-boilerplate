@@ -1,8 +1,7 @@
-import cgi
-
 from google.appengine.api import users, memcache
 
 from utils.decorators import validate_csrf
+from utils.helpers import escape_html
 from handlers.base import BaseHandler
 from models.topic import Topic
 from models.comment import Comment
@@ -29,7 +28,7 @@ class CommentAddHandler(BaseHandler):
             return self.write('Empty comments are not allowed!')
 
         new_comment = Comment.create(
-            content=cgi.escape(content, quote=True),
+            content=escape_html(content),
             user=logged_user,
             topic=topic,
         )
