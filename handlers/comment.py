@@ -1,3 +1,5 @@
+import cgi
+
 from google.appengine.api import users, memcache
 
 from utils.decorators import validate_csrf
@@ -27,7 +29,7 @@ class CommentAddHandler(BaseHandler):
             return self.write('Empty comments are not allowed!')
 
         new_comment = Comment.create(
-            content=content,
+            content=cgi.escape(content, quote=True),
             user=logged_user,
             topic=topic,
         )
