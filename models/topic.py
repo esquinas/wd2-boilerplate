@@ -13,7 +13,7 @@ class Topic(ndb.Model):
     @classmethod
     def create(cls, title, content, author_email):
         new_topic = cls(
-            title=escape_html(title),
+            title=escape_html(title, allow_links=False),
             content=escape_html(content),
             author_email=normalize_email(author_email),
         )

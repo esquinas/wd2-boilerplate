@@ -4,7 +4,7 @@ import cgi
 def normalize_email(email):
     return str(email).strip().lower()
 
-def escape_html(content):
+def escape_html(content, allow_links=True):
 
     def __allow_bold_text(text):
         regex = r'(\*{2})(.+?)\1'
@@ -22,7 +22,9 @@ def escape_html(content):
     escaped = cgi.escape(content,quote=True)
     escaped = escaped.replace("'", "&apos;")
 
-    escaped = __allow_links(escaped)
+    if allow_links:
+        escaped = __allow_links(escaped)
+
     escaped = __allow_bold_text(escaped)
 
     return escaped
