@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
 from google.appengine.api import mail, taskqueue
 
+from utils.helpers import escape_html
 
 class Comment(ndb.Model):
     content = ndb.TextProperty()
@@ -24,7 +25,7 @@ class Comment(ndb.Model):
         :return:
         """
         new_comment = cls(
-            content=content,
+            content=escape_html(content),
             topic_id=topic.key.id(),
             topic_title=topic.title,
             author_email=user.email(),
@@ -36,10 +37,12 @@ class Comment(ndb.Model):
             'topic-title': topic.title,
             'topic-id': topic.key.id(),
         }
+
         # Send notification email to topic author.
         taskqueue.add(url='/task/email-new-comment', params=params)
 
         # hostname = app_identity.get_default_version_hostname()
+        # print(hostname)
 
         mail.send_mail(
             sender='esquinas.enrique@gmail.com',

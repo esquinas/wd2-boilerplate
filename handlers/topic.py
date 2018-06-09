@@ -54,7 +54,7 @@ class TopicDeleteHandler(BaseHandler):
         logged_user = users.get_current_user()
         topic = Topic.get_by_id(int(topic_id))
 
-        is_same_author = normalize_email(topic.author_email) == normalize_email(logged_user.email())
+        is_same_author = (topic.author_email == normalize_email(logged_user.email()))
         is_admin = users.is_current_user_admin()
 
         if is_same_author or is_admin:

@@ -1,6 +1,6 @@
 from google.appengine.ext import ndb
 from models.comment import Comment
-
+from utils.helpers import normalize_email, escape_html
 
 class Topic(ndb.Model):
     title = ndb.StringProperty()
@@ -13,9 +13,9 @@ class Topic(ndb.Model):
     @classmethod
     def create(cls, title, content, author_email):
         new_topic = cls(
-            title=title,
-            content=content,
-            author_email=author_email,
+            title=escape_html(title),
+            content=escape_html(content),
+            author_email=normalize_email(author_email),
         )
 
         new_topic.put()
