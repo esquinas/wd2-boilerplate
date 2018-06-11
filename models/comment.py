@@ -1,6 +1,7 @@
 from google.appengine.ext import ndb
-from google.appengine.api import mail, taskqueue
+from google.appengine.api import app_identity, mail, taskqueue
 
+from models.topic_subscription import TopicSubscription
 from utils.helpers import escape_html
 
 class Comment(ndb.Model):
@@ -32,23 +33,25 @@ class Comment(ndb.Model):
         )
         new_comment.put()
 
-        params = {
-            'topic-author-email': topic.author_email,
-            'topic-title': topic.title,
-            'topic-id': topic.key.id(),
-        }
 
-        # TODO: Implement subscriptions to topics.
-        # for subscription in subscriptions:
-        #     if subscription.user_email != user.email():
-        #         subscribers.append(subscription.user_email)
-        # for email in subscribers:
+        subscriptions = TopicSubscription.query(TopicSubscription.topic_id == topic.key.id()).fetch()
 
-        # Send notification email to topic author.
-        taskqueue.add(url='/task/email-new-comment', params=params)
+        subscribers = [topic.author_email, ]
 
-        # hostname = app_identity.get_default_version_hostname()
-        # print(hostname)
+        for subscription in subscriptions:
+            if subscription.user_email != user.email():
+                subscribers.append(subscription.user_email)
+
+        # send notification to topic author and subscribers
+        for email in subscribers:
+            params = {
+                'topic-author-email': email,
+                'topic-title': topic.title,
+                'topic-id': topic.key.id(),
+            }
+            taskqueue.add(url='/task/email-new-comment', params=params)
+
+        hostname = app_identity.get_default_version_hostname()
 
         mail.send_mail(
             sender='esquinas.enrique@gmail.com',
@@ -57,11 +60,14 @@ class Comment(ndb.Model):
                        body="""
                            Your topic <strong>{0}</strong> received a new comment!
 
-                           Click <a href="https://smartninjawd2-ge-projects.appspot.com/topic/{1}">on this link</a> 
+                           Click <a href="https://{1}/topic/{2}">on this link</a> 
                            to see it.
+                           
+                           Hostname: {2}
                            """.format(
                            topic.title,
-                           topic.key.id()
+                           hostname,
+                           topic.key.id(),
                        )
         )
 
@@ -73,3 +79,5 @@ class Comment(ndb.Model):
         comment.deleted = True
         comment.put()
         return comment
+
+    # TODO: Implement @classmethod filter_by_topic(cls, topic)

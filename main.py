@@ -6,7 +6,8 @@ from handlers.cookie import CookieAlertHandler
 from handlers.topic import TopicAddHandler, TopicDeleteHandler, TopicDetailsHandler
 from handlers.comment import CommentAddHandler, CommentListHandler
 from workers.email_new_comment import EmailNewCommentWorker
-from cron.delete_topics import DeleteTopicsCron
+from crons.delete_topics import DeleteTopicsCron
+from crons.hot_topics_subscriptions import HotTopicsSubscriptions
 
 # Routes
 app = webapp2.WSGIApplication([
@@ -19,4 +20,5 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/task/email-new-comment', EmailNewCommentWorker, name='task-email-new-comment'),
     webapp2.Route('/my-comments', CommentListHandler, name='comment-list'),
     webapp2.Route('/cron/delete-topics', DeleteTopicsCron, name='cron-delete-topics'),
+    webapp2.Route('/cron/hottest-topics', HotTopicsSubscriptions, name='hottest-topics'),
 ], debug=True)
