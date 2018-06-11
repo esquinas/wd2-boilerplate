@@ -38,6 +38,12 @@ class Comment(ndb.Model):
             'topic-id': topic.key.id(),
         }
 
+        # TODO: Implement subscriptions to topics.
+        # for subscription in subscriptions:
+        #     if subscription.user_email != user.email():
+        #         subscribers.append(subscription.user_email)
+        # for email in subscribers:
+
         # Send notification email to topic author.
         taskqueue.add(url='/task/email-new-comment', params=params)
 
