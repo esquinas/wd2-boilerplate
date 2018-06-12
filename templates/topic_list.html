@@ -1,70 +1,75 @@
-<h1>Topics</h1>
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
-            <th class="col-sm-5">Title</th>
-            <th class="col-sm-4">Author</th>
+<div class="row">
+    <div class="col-md-10 col-md-offset-1">
 
-            {% if can_make_changes %}
+        <h1>Topics</h1>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th class="col-sm-2 hidden-xs hidden-sm">Created</th>
+                    <th class="col-sm-4">Title</th>
+                    <th class="col-sm-3">Author</th>
 
-            <th class="col-sm-1 hidden-xs">Action</th>
+                    {% if can_make_changes %}
 
-            {% endif %}
-        </tr>
-        </thead>
-        <tbody>
+                    <th class="col-sm-1 hidden-xs">Action</th>
 
-        {% for topic in topics if topics %}
-        <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
-            <td class="hidden-xs hidden-sm text-muted">
-                {{ topic.created.strftime('%d/%m/%Y, %H:%M') }}
-            </td>
-            <td>
-                <a href="topic/{{ topic.key.id() }}/details">
-                {{ topic.title | truncate(80) }}
-                </a>
-            </td>
-            <td>{{ topic.author_email }}</td>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
 
-            {% if can_make_changes %}
+                {% for topic in topics if topics %}
+                <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
+                    <td class="hidden-xs hidden-sm text-muted">
+                        {{ topic.created.strftime('%d/%m/%Y, %H:%M') }}
+                    </td>
+                    <td>
+                        <a href="topic/{{ topic.key.id() }}/details">
+                        {{ topic.title | truncate(80) }}
+                        </a>
+                    </td>
+                    <td>{{ topic.author_email }}</td>
 
-            <td class="hidden-xs">
-                <form id="js-del-form-{{ topic.key.id() }}"
-                      action="/topic/{{ topic.key.id() }}/delete"
-                      method="post">
-                    <button type="submit"
-                            class="btn btn-xs btn-danger hidden-xs"
-                            title="Delete this topic!">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>
-                </form>
-            </td>
+                    {% if can_make_changes %}
 
-            {% endif %}
+                    <td class="hidden-xs">
+                        <form id="js-del-form-{{ topic.key.id() }}"
+                              action="/topic/{{ topic.key.id() }}/delete"
+                              method="post">
+                            <button type="submit"
+                                    class="btn btn-xs btn-danger hidden-xs"
+                                    title="Delete this topic!">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </button>
+                        </form>
+                    </td>
 
-        </tr>
-        {% endfor %}
-        {% if not topics %}
-        <tr class="clickable-row" data-href="topic/add">
-            <td class="bg-info text-center text-info" colspan="4">
-                <p>There are no topics yet. Be a <strong>pioneer</strong> and ...</p>
-            <a class="btn btn-primary" href="/topic/add">Create a new topic!</a></td>
-        </tr>
-        {% endif%}
-        </tbody>
-    </table>
+                    {% endif %}
+
+                </tr>
+                {% endfor %}
+                {% if not topics %}
+                <tr class="clickable-row" data-href="topic/add">
+                    <td class="bg-info text-center text-info" colspan="4">
+                        <p>There are no topics yet. Be a <strong>pioneer</strong> and ...</p>
+                    <a class="btn btn-primary" href="/topic/add">Create a new topic!</a></td>
+                </tr>
+                {% endif%}
+                </tbody>
+            </table>
+        </div>
+
+        <script language="JavaScript">
+            var clickableRows = document.querySelectorAll('.clickable-row');
+
+            clickableRows.forEach(function (row) {
+                 row.addEventListener('click', makeClickable);
+                });
+
+            function makeClickable () {
+                window.location = this.getAttribute('data-href');
+            }
+        </script>
+    </div>
 </div>
-
-<script language="JavaScript">
-    var clickableRows = document.querySelectorAll('.clickable-row');
-
-    clickableRows.forEach(function (row) {
-         row.addEventListener('click', makeClickable);
-        });
-
-    function makeClickable () {
-        window.location = this.getAttribute('data-href');
-    }
-</script>
