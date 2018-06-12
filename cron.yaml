@@ -4,4 +4,5 @@ cron:
   schedule: every sunday 09:00
 
 - description: Email subscribers about new topics (created in the last 24 hours)
-  url: /cron/hottest-topics
+  url: /cron/send-new-topics
+  schedule: every day 18:30

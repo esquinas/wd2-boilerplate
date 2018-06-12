@@ -17,7 +17,12 @@ class WebsiteSubscription(ndb.Model):
         return new_website_subscription
 
     @classmethod
-    def list_subscriber_emails(cls):
+    def list_emails(cls):
+        '''Class method to list all subscribers' emails.
+
+        :return: A list of strings containing subscribers' emails.
+        :type string[]
+        '''
         all_subscriptions = cls.query()
         return [subscriber.user_email for subscriber in all_subscriptions]
 

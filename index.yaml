@@ -33,3 +33,8 @@ indexes:
   properties:
   - name: deleted
   - name: created
+
+- kind: Topic
+  properties:
+  - name: deleted
+  - name: updated

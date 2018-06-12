@@ -1,45 +1,73 @@
-from google.appengine.api import app_identity
+from google.appengine.api import app_identity, taskqueue
+
 from datetime import datetime, timedelta
 
 from handlers.base import BaseHandler
 from models.topic import Topic
 from models.website_subscription import WebsiteSubscription
 
+
 class SendNewTopicsCron(BaseHandler):
     def get(self):
-        # Prepare users
-        subscriber = WebsiteSubscription.list().fetch()
+        subscribers_emails = WebsiteSubscription.list_emails()
 
-        # Prepare topics
+        topics_to_email = self.__prepare_new_topics()
+
+        content = self.__prepare_content(topics_to_email)
+
+        for email in subscribers_emails:
+            params = {
+                'subscriber-email': email,
+                'body-content': content,
+            }
+
+            taskqueue.add(url='/task/email-new-topics', params=params)
+
+        return None
+
+    # Private methods
+    def __prepare_new_topics(self):
         one_day_ago = datetime.now() - timedelta(hours=24)
-
         hottest_topics = Topic.list().filter(Topic.created > one_day_ago)
-        topics_to_email = hottest_topics.fetch()
+        return hottest_topics.fetch()
 
-        # Prepare email
-        body_content = []
+    def __prepare_content(self, topics):
         hostname = app_identity.get_default_version_hostname()
 
-        topics = []
+        topics_ul = '''
+            <ul>
+                {}
+            </ul>
+        '''.format(self.__prepare_topics_li(topics))
 
-        for topic in topics_to_email:
-            topics.append(topic.key.id())
+        # TODO: Handle un-subscriptions by simple link (get).
+        unsubscribe_footer = '<a href="#">No automatic unsubscribe link yet, sorry</a>.\n'
 
-                '''
-                subscriptions = TopicSubscription.query(TopicSubscription.topic_id == topic.key.id()).fetch()
+        # TODO: Use some kind of template system for different emails.
+        content = """
+            Hello!
+            
+            Here you have all topics from yesterday:
+            
+            {0}
+            
+            Thanks for your subscription and we hope you liked the read!
+            
+            Sincerely,
+            {1} webmaster
+            
+            <blockquote>{2}</blockquote>
+        """.format(topics_ul, hostname, unsubscribe_footer)
 
-        subscribers = [topic.author_email, ]
+        return content
 
-        for subscription in subscriptions:
-            if subscription.user_email != user_email:
-                subscribers.append(subscription.user_email)
+    def __prepare_topics_li(self, topics):
+        li = ''
+        hostname = app_identity.get_default_version_hostname()
 
-        # Send notification to topic author and subscribers.
-        for email in subscribers:
-            params = {
-                'topic-author-email': email,
-                'topic-title': topic.title,
-                'topic-id': topic.key.id(),
-            }
-            taskqueue.add(url='/task/email-new-comment', params=params)
-                '''
+        for topic in topics:
+            li += """
+              <li><a href="https://{0}/topic/{1}">{2}</a></li>
+              """.format(hostname, topic.key.id(), topic.title)
+
+        return li

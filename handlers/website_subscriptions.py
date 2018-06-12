@@ -13,7 +13,7 @@ class WebsiteSubscriptionsHandler(BaseHandler):
         if not logged_user:
             return self.write('Please login to be allowed to subscribe.')
 
-        WebsiteSubscription.create(user)
+        WebsiteSubscription.create(logged_user)
 
         flash = {
             'flash_message': "You've been subscribed succesfully to hot topics.",
