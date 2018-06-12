@@ -8,7 +8,7 @@ class EmailNewTopicsWorker(BaseHandler):
         body_content = self.request.get('body-content')
 
         mail.send_mail(
-            sender='esquinas.enrique@gmail.com',
+            sender='no-reply@smartninjawd2-ge-projects.appspotmail.com',
                        to=subscriber_email,
                        subject='New topics',
                        body=body_content,

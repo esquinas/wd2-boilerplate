@@ -11,7 +11,7 @@ class EmailNewCommentWorker(BaseHandler):
         topic_id = self.request.get('topic-id')
 
         mail.send_mail(
-            sender='esquinas.enrique@gmail.com',
+            sender='no-reply@smartninjawd2-ge-projects.appspotmail.com',
                        to=topic_author_email,
                        subject='New comment on your topic',
                        body="""
