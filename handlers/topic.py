@@ -75,7 +75,7 @@ class TopicDetailsHandler(BaseHandler):
         topic = Topic.get_by_id(int_topic_id)
 
         logged_user = users.get_current_user()
-        is_same_author = normalize_email(topic.author_email) == normalize_email(logged_user.email())
+        is_same_author = topic.author_email == normalize_email(logged_user.email())
 
         if is_same_author or is_admin:
             is_authorized = True
