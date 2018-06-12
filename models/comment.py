@@ -2,7 +2,8 @@ from google.appengine.ext import ndb
 from google.appengine.api import app_identity, mail, taskqueue
 
 from models.topic_subscription import TopicSubscription
-from utils.helpers import escape_html
+from utils.helpers import escape_html, normalize_email
+
 
 class Comment(ndb.Model):
     content = ndb.TextProperty()
@@ -23,13 +24,15 @@ class Comment(ndb.Model):
         :type user: User
         :param topic: Topic where the comment belongs to
         :type topic: Topic
-        :return:
+        :return: New comment
         """
+        user_email = normalize_email(user.email())
+
         new_comment = cls(
             content=escape_html(content),
             topic_id=topic.key.id(),
             topic_title=topic.title,
-            author_email=user.email(),
+            author_email=user_email,
         )
         new_comment.put()
 
@@ -39,10 +42,10 @@ class Comment(ndb.Model):
         subscribers = [topic.author_email, ]
 
         for subscription in subscriptions:
-            if subscription.user_email != user.email():
+            if subscription.user_email != user_email:
                 subscribers.append(subscription.user_email)
 
-        # send notification to topic author and subscribers
+        # Send notification to topic author and subscribers.
         for email in subscribers:
             params = {
                 'topic-author-email': email,
@@ -80,4 +83,23 @@ class Comment(ndb.Model):
         comment.put()
         return comment
 
-    # TODO: Implement @classmethod filter_by_topic(cls, topic)
+    @classmethod
+    def filter_by_topic(cls, topic):
+        '''Classmethod to filter comments by topic
+
+        :param topic: Topic instance
+        :return: Query
+        '''
+        query = cls.query(cls.deleted == False).filter(cls.topic_id == topic.key.id())
+        return query
+
+    @classmethod
+    def filter_by_author_email(cls, email):
+        '''Classmethod to filter comments by author's email.
+
+        :param email: string
+        :return: Query
+        '''
+        query = cls.query(cls.deleted == False).filter(cls.author_email == email)
+        return query
+

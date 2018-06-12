@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+from utils.helpers import normalize_email
 
 
 class TopicSubscription(ndb.Model):
@@ -7,8 +8,10 @@ class TopicSubscription(ndb.Model):
 
     @classmethod
     def create(cls, user, topic):
+        user_email = normalize_email(user.email())
+
         new_topic_subscription = cls(
-            user_email=user.email(),
+            user_email=user_email,
             topic_id=topic.key.id()
         )
         new_topic_subscription.put()
