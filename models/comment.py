@@ -82,3 +82,4 @@ class Comment(ndb.Model):
         query = cls.query(cls.deleted == False).filter(cls.author_email == email)
         return query
 
+

@@ -8,6 +8,12 @@
             <div class="panel-heading">
                 <a name="comment-anchor-{{ comment.key.id() }}"></a>
                 {{ comment.author_email }} commented on the {{ comment.created.strftime('%d/%m/%Y at %H:%M') }}
+                <div class="pull-right">
+                    <form action="/topic/{{ topic.key.id() }}/comment/{{ comment.key.id() }}/delete" method="post">
+                        <input type="hidden" name="csrf-token" value="{{ csrf_token }}">
+                        <input type="submit" class="btn btn-xs btn-danger" value="Delete">
+                    </form>
+                </div>
             </div>
             <div class="panel-body">
                 {{ comment.content }}

@@ -60,3 +60,25 @@ class CommentListHandler(BaseHandler):
         }
 
         return self.render_template('comment_list.html', params=context)
+
+class CommentDeleteHandler(BaseHandler):
+    @validate_csrf
+    def post(self, topic_id, comment_id):
+        is_admin = users.is_current_user_admin()
+        logged_user = users.get_current_user()
+
+        comment = Comment.get_by_id(int(comment_id))
+        is_author = comment.author_email == logged_user.email()
+
+        if is_admin or is_author:
+            Comment.delete(comment_id)
+        else:
+            return self.write('You cannot delete other users comments.')
+
+        flash = {
+            'flash_message': 'Comment deleted successfully',
+            'flash_class': 'alert-warning',
+        }
+
+        return self.redirect_to('topic-details', topic_id=topic_id, **flash)
+
