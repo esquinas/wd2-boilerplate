@@ -29,6 +29,11 @@
             <div class="panel-heading">
                 <h1 class="panel-title">
                     <strong>{{ topic.title }}</strong>
+                    <div class="pull-right">
+                    {% if not is_subscribed %}
+                        <a href="/topic/{{ topic.key.id() }}/subscribe" class="btn btn-success btn-xs">Subscribe</a>
+                    {% endif %}
+                    </div>
                 </h1>
             </div>
 

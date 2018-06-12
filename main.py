@@ -4,6 +4,7 @@ import webapp2
 from handlers.home import HomeHandler
 from handlers.cookie import CookieAlertHandler
 from handlers.topic import TopicAddHandler, TopicDeleteHandler, TopicDetailsHandler
+from handlers.topic_subcription import TopicSubscribeHandler
 from handlers.comment import CommentAddHandler, CommentListHandler
 from handlers.website_subscriptions import WebsiteSubscriptionsHandler
 
@@ -23,6 +24,7 @@ app = webapp2.WSGIApplication([
     webapp2.Route('/topic/add', TopicAddHandler, name='topic-add'),
     webapp2.Route('/topic/<topic_id:\d+>/delete', TopicDeleteHandler, name='topic-delete'),
     webapp2.Route('/topic/<topic_id:\d+>/details', TopicDetailsHandler, name='topic-details'),
+    webapp2.Route('/topic/<topic_id:\d+>/subscribe', TopicSubscribeHandler, name="topic-subscribe"),
     webapp2.Route('/topic/<topic_id:\d+>/comment/add', CommentAddHandler, name='comment-add'),
 
     webapp2.Route('/task/email-new-comment', EmailNewCommentWorker, name='task-email-new-comment'),

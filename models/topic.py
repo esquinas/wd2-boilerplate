@@ -1,4 +1,6 @@
 from google.appengine.ext import ndb
+from google.appengine.api import users
+
 from models.comment import Comment
 from utils.helpers import normalize_email, escape_html
 

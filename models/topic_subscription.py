@@ -28,8 +28,10 @@ class TopicSubscription(ndb.Model):
         :type   Topic
         :return: Boolean
         '''
+        user_email = normalize_email(user.email())
+
         topic_subscriptions = cls.query(cls.topic_id == topic.key.id())
-        subscriptions = topic_subscriptions.filter(cls.user_email == user.email())
+        subscriptions = topic_subscriptions.filter(cls.user_email == user_email)
         subscription_length = subscriptions.count()
 
         return subscription_length > 0
