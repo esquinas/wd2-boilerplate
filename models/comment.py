@@ -1,5 +1,5 @@
 from google.appengine.ext import ndb
-from google.appengine.api import app_identity, mail, taskqueue
+from google.appengine.api import taskqueue
 
 from models.topic_subscription import TopicSubscription
 from utils.helpers import escape_html, normalize_email
@@ -36,7 +36,6 @@ class Comment(ndb.Model):
         )
         new_comment.put()
 
-
         subscriptions = TopicSubscription.query(TopicSubscription.topic_id == topic.key.id()).fetch()
 
         subscribers = [topic.author_email, ]
@@ -53,26 +52,6 @@ class Comment(ndb.Model):
                 'topic-id': topic.key.id(),
             }
             taskqueue.add(url='/task/email-new-comment', params=params)
-
-        hostname = app_identity.get_default_version_hostname()
-
-        mail.send_mail(
-            sender='esquinas.enrique@gmail.com',
-                       to=topic.author_email,
-                       subject='New comment on your topic',
-                       body="""
-                           Your topic <strong>{0}</strong> received a new comment!
-
-                           Click <a href="https://{1}/topic/{2}">on this link</a> 
-                           to see it.
-                           
-                           Hostname: {2}
-                           """.format(
-                           topic.title,
-                           hostname,
-                           topic.key.id(),
-                       )
-        )
 
         return new_comment
 
