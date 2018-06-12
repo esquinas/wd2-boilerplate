@@ -8,7 +8,8 @@ class HomeHandler(BaseHandler):
     def get(self):
         is_admin = users.is_current_user_admin()
 
-        topics = Topic.query(Topic.deleted == False).fetch()
+        # topics = Topic.query(Topic.deleted == False).fetch()
+        topics = Topic.list().fetch()
 
         context = {
             'topics': topics,

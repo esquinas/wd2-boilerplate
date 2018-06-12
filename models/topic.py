@@ -22,6 +22,16 @@ class Topic(ndb.Model):
 
         return new_topic
 
+    @classmethod
+    def list(cls, include_deleted=False):
+        '''Class method that lists all topics.
+
+        :param include_deleted: detaults to False
+        :type  boolean
+        :return: Query
+        '''
+        return cls.query(cls.deleted == include_deleted)
+
     # Delete Topics here if admin or author. Also delete its comments.
     @classmethod
     def delete(cls, topic_id):

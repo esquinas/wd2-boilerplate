@@ -80,9 +80,6 @@ class TopicDetailsHandler(BaseHandler):
         if is_same_author or is_admin:
             is_authorized = True
 
-        #all_comments = Comment.query(Comment.deleted == False)
-        #asorted_topic_comments = all_comments.filter(Comment.topic_id == int_topic_id)
-        #comments = asorted_topic_comments.order(Comment.created).fetch()
         query = Comment.filter_by_topic(topic)
         comments = query.order(Comment.created).fetch()
 
