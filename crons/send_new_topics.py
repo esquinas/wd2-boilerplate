@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from google.appengine.api import app_identity, taskqueue
 
 from datetime import datetime, timedelta
@@ -13,12 +15,17 @@ class SendNewTopicsCron(BaseHandler):
 
         topics_to_email = self.__prepare_new_topics()
 
-        content = self.__prepare_content(topics_to_email)
+        text_content, html_content = self.__prepare_content(topics_to_email)
+
+        # # Uncomment for debugging.
+        # print(text_content)
+        # print(html_content)
 
         for email in subscribers_emails:
             params = {
                 'subscriber-email': email,
-                'body-content': content,
+                'body-content': text_content,
+                'html-content': html_content,
             }
 
             taskqueue.add(url='/task/email-new-topics', params=params)
@@ -35,31 +42,40 @@ class SendNewTopicsCron(BaseHandler):
         hostname = app_identity.get_default_version_hostname()
 
         topics_ul = '''
-            <ul>
-                {}
-            </ul>
-        '''.format(self.__prepare_topics_li(topics))
+                    <ul>
+                        {}
+                    </ul>
+                '''.format(self.__prepare_topics_li(topics))
 
         # TODO: Handle un-subscriptions by simple link (get).
-        unsubscribe_footer = '<a href="#">No automatic unsubscribe link yet, sorry</a>.\n'
+        unsubscribe_link = 'No automatic unsubscribe link yet, sorry'
+        unsubscribe_footer = '<a href="#">' + unsubscribe_link + '</a>.\n'
 
         # TODO: Use some kind of template system for different emails.
-        content = """
-            Hello!
-            
-            Here you have all topics from yesterday:
-            
-            {0}
-            
-            Thanks for your subscription and we hope you liked the read!
-            
-            Sincerely,
-            {1} webmaster
-            
-            <blockquote>{2}</blockquote>
+        text_content = "Hello!\n\n"
+        text_content += "Here you have all topics from yesterday:\n\n"
+        text_content += self.__prepare_topics_text(topics)
+        text_content += "Thanks for your subscription and we hope you liked the read!\n\n"
+        text_content += "Sincerely,\n"
+        text_content += "{} webmaster\n\n".format(hostname)
+        text_content += "{}".format(unsubscribe_link)
+
+        html_content = """
+                       <p>Hello!</p>
+                        
+                       <p>Here you have all topics from yesterday:</p>
+                        
+                       {0}
+                        
+                       <p>Thanks for your subscription and we hope you liked the read!</p>
+                        
+                       <p>Sincerely,<br>
+                       <a href="https://{1}">{1}</a> webmaster.</p>
+                        
+                       <blockquote>{2}</blockquote>
         """.format(topics_ul, hostname, unsubscribe_footer)
 
-        return content
+        return text_content, html_content
 
     def __prepare_topics_li(self, topics):
         li = ''
@@ -71,3 +87,13 @@ class SendNewTopicsCron(BaseHandler):
               """.format(hostname, topic.key.id(), topic.title)
 
         return li
+
+    def __prepare_topics_text(self, topics):
+        line = ''
+        hostname = app_identity.get_default_version_hostname()
+
+        for topic in topics:
+            line += "\t- {0}:\n\t  https://{1}/topic/{2}/details\n\n".format(topic.title, hostname, topic.key.id())
+
+        return line
+
