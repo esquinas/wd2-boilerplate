@@ -72,6 +72,10 @@ class TopicDetailsHandler(BaseHandler):
         is_authorized = False
         is_admin = users.is_current_user_admin()
         logged_user = users.get_current_user()
+
+        if not logged_user:
+            return self.write('You must log in to see this topic.')
+
         user_email = normalize_email(logged_user.email())
 
         int_topic_id = int(topic_id)
