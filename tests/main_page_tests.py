@@ -11,7 +11,7 @@ class HomePageTests(unittest.TestCase):
     def setUp(self):
         app = webapp2.WSGIApplication(
             [
-                webapp2.Route('/', HomeHandler, name="main-page"),
+                webapp2.Route('/', HomeHandler, name="home-page"),
             ])
 
         self.testapp = webtest.TestApp(app)
@@ -37,4 +37,10 @@ class HomePageTests(unittest.TestCase):
         get = self.testapp.get('/')  # get home handler
         self.assertEqual(get.status_int, 200,
                          'GET root address (/) should return an ok status (200).')
+
+    def test_home_page_body_includes_website_name(self):
+        response = self.testapp.get('/')
+        self.assertIn('Ninja Tech Forum', response.body,
+                         'Home page should include "Welcome to Ninja Tech Forum".')
+
 
