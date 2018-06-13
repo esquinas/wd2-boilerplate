@@ -7,7 +7,7 @@ from google.appengine.ext import testbed
 from handlers.home import HomeHandler
 
 
-class MainPageTests(unittest.TestCase):
+class HomePageTests(unittest.TestCase):
     def setUp(self):
         app = webapp2.WSGIApplication(
             [
@@ -33,6 +33,8 @@ class MainPageTests(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def test_main_page_handler(self):
-        get = self.testapp.get('/')  # get main handler
-        self.assertEqual(get.status_int, 200)  # if GET request was ok, it should return 200 status code
+    def test_home_page_root_returns_ok_status_when_GET_requested(self):
+        get = self.testapp.get('/')  # get home handler
+        self.assertEqual(get.status_int, 200,
+                         'GET root address (/) should return an ok status (200).')
+
