@@ -33,14 +33,16 @@ class HomePageTests(unittest.TestCase):
     def tearDown(self):
         self.testbed.deactivate()
 
-    def test_home_page_root_returns_ok_status_when_GET_requested(self):
-        get = self.testapp.get('/')  # get home handler
-        self.assertEqual(get.status_int, 200,
+    def test_get_home_page_root_returns_ok_status(self):
+        expected = 200
+        request = self.testapp.get('/')  # get home handler
+        self.assertEqual(request.status_int, expected,
                          'GET root address (/) should return an ok status (200).')
 
     def test_home_page_body_includes_website_name(self):
+        expected = 'Ninja Tech Forum'
         response = self.testapp.get('/')
-        self.assertIn('Ninja Tech Forum', response.body,
+        self.assertIn(expected, response.body,
                          'Home page should include "Welcome to Ninja Tech Forum".')
 
 
