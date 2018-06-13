@@ -4,14 +4,14 @@ import webapp2
 import webtest
 
 from google.appengine.ext import testbed
-from main import MainHandler
+from handlers.home import HomeHandler
 
 
 class MainPageTests(unittest.TestCase):
     def setUp(self):
         app = webapp2.WSGIApplication(
             [
-                webapp2.Route('/', MainHandler, name="main-page"),
+                webapp2.Route('/', HomeHandler, name="main-page"),
             ])
 
         self.testapp = webtest.TestApp(app)
