@@ -11,9 +11,9 @@ from handlers.topic import TopicAddHandler, TopicDetailsHandler
 from models.topic import Topic
 
 VALID_USER_EMAIL = 'some.user@example.com'
-INVALID_USER_EMAIL = 'invalid-email!'
 
-class TopicTests(unittest.TestCase):
+
+class TopicAddHandlerTests(unittest.TestCase):
     def setUp(self):
         app = webapp2.WSGIApplication(
             [
@@ -34,7 +34,7 @@ class TopicTests(unittest.TestCase):
         # ...
 
         """ Uncomment if you need user (Google Login) and if this user needs to be admin. """
-        os.environ['USER_EMAIL'] = 'some.user@example.com'
+        os.environ['USER_EMAIL'] = VALID_USER_EMAIL
         # os.environ['USER_IS_ADMIN'] = '1'
 
     def tearDown(self):
