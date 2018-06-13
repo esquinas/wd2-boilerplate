@@ -14,7 +14,7 @@ class TopicAddHandler(BaseHandler):
         logged_user = users.get_current_user()
 
         if not logged_user:
-            return self.write("Please login before you're allowed to post a topic.")
+            return self.write("Error\nPlease login before you're allowed to post a topic.")
 
         return self.render_template_with_csrf('topic_add.html')
 
@@ -23,7 +23,7 @@ class TopicAddHandler(BaseHandler):
         logged_user = users.get_current_user()
 
         if not logged_user:
-            return self.write('Please login to be allowed to post a new Topic.')
+            return self.write('Error\nPlease login to be allowed to post a new Topic.')
 
         title_value = self.request.get('title')
         text_value = self.request.get('text')
@@ -61,7 +61,7 @@ class TopicDeleteHandler(BaseHandler):
         if is_same_author or is_admin:
             Topic.delete(topic_id)
         else:
-            return self.write("Sorry, you're not allowed to delete this topic.")
+            return self.write("Error\nSorry, you're not allowed to delete this topic.")
 
         return self.redirect_to('home-page')
 
@@ -74,7 +74,7 @@ class TopicDetailsHandler(BaseHandler):
         logged_user = users.get_current_user()
 
         if not logged_user:
-            return self.write('You must log in to see this topic.')
+            return self.write('Error\nYou must login to see this topic.')
 
         user_email = normalize_email(logged_user.email())
 

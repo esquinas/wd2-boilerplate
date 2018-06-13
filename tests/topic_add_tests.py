@@ -1,5 +1,5 @@
 import os
-import uuid
+import re
 import unittest
 import webapp2
 import webtest
@@ -55,8 +55,25 @@ class TopicTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(response.status_int, 200)
+        self.assertIn('Error', response.body)
         self.assertIn('Please login', response.body,
                       'Logged out user should not be able to see topics.' + response.body)
+
+    def test_post_topic_add_handler_user_not_logged_in(self):
+        # Arrange
+        os.environ['USER_EMAIL'] = ''
+        csrf_token = '00000000-1111-2222-3333-444444444444'
+        request_args = {
+            'title': 'Test Title',
+            'text': 'Test text...',
+            'csrf-token': csrf_token,
+        }
+        # Act
+        response = self.testapp.post('/topic/add', request_args)
+        # Assert
+        self.assertEqual(response.status_int, 200)
+        self.assertIn('Error', response.body,
+                      'Logged out user should not be able to post topics.\nBody:\n' + response.body)
 
     def test_post_topic_add_handler_should_redirect(self):
         # Arrange
@@ -66,6 +83,7 @@ class TopicTests(unittest.TestCase):
         request_args = {
             'title': 'Test Title',
             'text': 'Test text...',
+            'author_email': os.environ['USER_EMAIL'],
             'csrf-token': csrf_token,
         }
         # Act
@@ -73,11 +91,15 @@ class TopicTests(unittest.TestCase):
 
         # Assert
         expected = 302 # Redirected
+        expected_location = r'topic/\d+/details'
         topic = Topic.query().get()
 
         self.assertEqual(response.status_int, expected,
                          'POST topic add should return a redirected status (302).\nBody:\n' +
                           response.body)
+        self.assertTrue(re.search(expected_location, response.location),
+                        'Adding a topic should redirect to topic/d+/details.\nLocation:\n' + response.location)
         self.assertEqual(topic.title, request_args['title'])
         self.assertEqual(topic.content, request_args['text'])
+        self.assertEqual(topic.author_email, request_args['author_email'])
 
