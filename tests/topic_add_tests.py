@@ -8,6 +8,7 @@ from google.appengine.ext import testbed
 from google.appengine.api import memcache
 
 from handlers.topic import TopicAddHandler, TopicDetailsHandler
+from models.topic import Topic
 
 VALID_USER_EMAIL = 'some.user@example.com'
 INVALID_USER_EMAIL = 'invalid-email!'
@@ -17,7 +18,7 @@ class TopicTests(unittest.TestCase):
         app = webapp2.WSGIApplication(
             [
                 webapp2.Route('/topic/add', TopicAddHandler, name='topic-add'),
-                webapp2.Route('/topic/<topic_id>/details', TopicDetailsHandler, name='topic-details')
+                webapp2.Route('/topic/<topic_id:\d+>/details', TopicDetailsHandler, name='topic-details')
             ])
 
         self.testapp = webtest.TestApp(app)
@@ -45,6 +46,18 @@ class TopicTests(unittest.TestCase):
         self.assertEqual(response.status_int, expected,
                          'GET topic add address (/topic/add) should return an ok status (200).')
 
+    def test_get_topic_add_handler_user_not_logged_in(self):
+        # Arrange
+        os.environ['USER_EMAIL'] = ''
+
+        # Act
+        response = self.testapp.get('/topic/add')
+
+        # Assert
+        self.assertEqual(response.status_int, 200)
+        self.assertIn('Please login', response.body,
+                      'Logged out user should not be able to see topics.' + response.body)
+
     def test_post_topic_add_handler_should_redirect(self):
         # Arrange
         csrf_token = '00000000-1111-2222-3333-444444444444'
@@ -60,9 +73,11 @@ class TopicTests(unittest.TestCase):
 
         # Assert
         expected = 302 # Redirected
+        topic = Topic.query().get()
+
         self.assertEqual(response.status_int, expected,
                          'POST topic add should return a redirected status (302).\nBody:\n' +
                           response.body)
-
-
+        self.assertEqual(topic.title, request_args['title'])
+        self.assertEqual(topic.content, request_args['text'])
 
