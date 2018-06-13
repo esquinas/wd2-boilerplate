@@ -5,6 +5,7 @@ from google.appengine.api import mail, app_identity
 
 
 class EmailNewCommentWorker(BaseHandler):
+    # TODO: Do not send new comment to comment author.
     def post(self):
         app_id = app_identity.get_application_id()
         hostname = app_identity.get_default_version_hostname()
