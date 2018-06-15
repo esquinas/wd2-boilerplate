@@ -1,4 +1,5 @@
 import os
+import re
 import unittest
 import webapp2
 import webtest
@@ -49,5 +50,17 @@ class TopicDetailsHandlerTest(unittest.TestCase):
         expected = 200 # Ok
         response = self.testapp.get('/topic/1/details')
         self.assertEqual(response.status_int, expected)
+
+    def test_get_topic_details_when_user_not_logged_in(self):
+        os.environ['USER_EMAIL'] = ''
+        expect_success = 200 # Ok
+        expected = r'((log[ -]?in)|(logged in))'
+
+        response = self.testapp.get('/topic/1/details')
+        self.assertEqual(response.status_int, expect_success)
+        self.assertFalse(re.search(r'Created', response.body, re.IGNORECASE))
+        self.assertTrue(re.search(r'Error', response.body, re.IGNORECASE))
+        self.assertTrue(re.search(expected, response.body, re.IGNORECASE),
+                      'Should not show topic details when user is not logged in.\nBody\n' + response.body)
 
 
