@@ -32,12 +32,15 @@ class TopicDetailsHandlerTest(unittest.TestCase):
 
         # Create one topic
         csrf_token = '00000000-1111-2222-3333-444444444444'
+        memcache.add(key=csrf_token, value=VALID_USER_EMAIL, time=600)
+
         request_args = {
             'title': 'First Topic',
             'text': 'Test text...',
+            'author_email': os.environ['USER_EMAIL'],
             'csrf-token': csrf_token,
         }
-        self.testapp.post('/topic/add', request_args)
+        response = self.testapp.post('/topic/add', request_args)
 
     def tearDown(self):
         self.testbed.deactivate()
@@ -46,4 +49,5 @@ class TopicDetailsHandlerTest(unittest.TestCase):
         expected = 200 # Ok
         response = self.testapp.get('/topic/1/details')
         self.assertEqual(response.status_int, expected)
+
 
