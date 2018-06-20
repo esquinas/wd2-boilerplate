@@ -23,7 +23,7 @@
             </div>
 
             <fieldset class="text-right">
-                <button type="submit" class="btn btn-success">Submit</button>
+                <button type="submit" class="btn btn-success js-prevent-resubmission">Submit</button>
             </fieldset>
         </form>
     </div>
@@ -33,8 +33,39 @@
 
 {% block scripts %}
 <script>
+// TODO: FIX - Potential danger - this modifies jQuery.
+jQuery.fn.preventResubmission = function() {
+    $(this).on('submit', function(e) {
+        var form = $(this);
+
+        if (form.data('submitted') === true) {
+            // Previously submitted - don't submit again
+            e.preventDefault();
+        } else {
+            // Mark it so that the next submit can be ignored
+            form.data('submitted', true);
+        }
+    });
+
+    // Keep chainability
+    return this;
+};
+
+
     $(document).ready(function() {
-        console.log("ready!");
+        var addTopicButton = $('.js-prevent-resubmission');
+
+        function disableTopicButton(e) {
+            addTopicButton.addClass('disabled');
+        }
+
+        addTopicButton.closest('form').preventResubmission();
+
+        addTopicButton
+            .click(disableTopicButton)
+            .dblclick(disableTopicButton)
+            .keypress(disableTopicButton);
+
     });
 </script>
 {% endblock scripts %}
