@@ -22,6 +22,11 @@
                 <textarea id="text-textarea" name="text" class="form-control" rows="6" required></textarea>
             </div>
 
+            <div class="form-group">
+                <label for="add-topic-sum" class="js-sum-label">What is the sum of 0 and 0?</label>
+                <input type="text" id="add-topic-sum" class="form-control js-human-check" required>
+            </div>
+
             <fieldset class="text-right">
                 <button type="submit" class="btn btn-success js-prevent-resubmission">Submit</button>
             </fieldset>
@@ -33,39 +38,57 @@
 
 {% block scripts %}
 <script>
-// TODO: FIX - Potential danger - this modifies jQuery.
-jQuery.fn.preventResubmission = function() {
-    $(this).on('submit', function(e) {
-        var form = $(this);
+    // TODO: FIX - Potential danger - this modifies jQuery.
+    jQuery.fn.preventResubmission = function() {
+        $(this).on('submit', function(e) {
+            var form = $(this);
 
-        if (form.data('submitted') === true) {
-            // Previously submitted - don't submit again
-            e.preventDefault();
-        } else {
-            // Mark it so that the next submit can be ignored
-            form.data('submitted', true);
-        }
-    });
+            if (form.data('submitted') === true) {
+                // Previously submitted - don't submit again
+                e.preventDefault();
+            } else {
+                // Mark it so that the next submit can be ignored
+                form.data('submitted', true);
+            }
+        });
 
-    // Keep chainability
-    return this;
-};
+        // Keep chainability
+        return this;
+    };
+/*
+if (addTopicHumanCheck.val() === '10') {
+                addTopicButton.addClass('disabled');
 
+            } else {
+                alert('Sorry, wrong sum.');
+                e.preventDefault();
+            }
+*/
 
     $(document).ready(function() {
         var addTopicButton = $('.js-prevent-resubmission');
+        var addTopicHumanCheck = $('.js-human-check');
+        var addTopicForm = addTopicButton.closest('form');
+        var addTopicSumLabel = $('.js-sum-label');
 
-        function disableTopicButton(e) {
-            addTopicButton.addClass('disabled');
-        }
+        var firstNumber = 1 + Math.floor(Math.random() * 9);
+        var secondNumber = 1 + Math.floor(Math.random() * 19);
+        var sumNumber = firstNumber + secondNumber;
 
-        addTopicButton.closest('form').preventResubmission();
+        addTopicSumLabel.text('What is the sum of ' + firstNumber + ' and ' + secondNumber + '?');
 
-        addTopicButton
-            .click(disableTopicButton)
-            .dblclick(disableTopicButton)
-            .keypress(disableTopicButton);
-
+        addTopicForm
+            .preventResubmission()
+            .submit(function(e) {
+                var userSum = Number(addTopicHumanCheck.val())
+                if (userSum !== sumNumber) {
+                    alert('Sorry, wrong sum: ' +
+                        firstNumber + ' plus ' + secondNumber +
+                        ' do not equal ' +  userSum + '\n' +
+                        'Please try again.');
+                    e.preventDefault();
+                }
+            })
     });
 </script>
 {% endblock scripts %}
