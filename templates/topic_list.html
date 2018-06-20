@@ -24,7 +24,7 @@
                 <tbody>
 
                 {% for topic in topics if topics %}
-                <tr class="clickable-row" data-href="topic/{{ topic.key.id() }}/details">
+                <tr class="js-clickable-row" data-href="topic/{{ topic.key.id() }}/details">
                     <td class="hidden-xs hidden-sm text-muted">
                         {{ topic.created.strftime('%d/%m/%Y, %H:%M') }}
                     </td>
@@ -54,7 +54,7 @@
                 </tr>
                 {% endfor %}
                 {% if not topics %}
-                <tr class="clickable-row" data-href="topic/add">
+                <tr class="js-clickable-row" data-href="topic/add">
                     <td class="bg-info text-center text-info" colspan="4">
                         <p>There are no topics yet. Be a <strong>pioneer</strong> and ...</p>
                     <a class="btn btn-primary" href="/topic/add">Create a new topic!</a></td>
@@ -63,19 +63,6 @@
                 </tbody>
             </table>
         </div>
-
-        <script language="JavaScript">
-            var clickableRows = document.querySelectorAll('.clickable-row');
-
-            clickableRows.forEach(function (row) {
-                 row.addEventListener('click', makeClickable);
-                });
-
-            function makeClickable () {
-                window.location = this.getAttribute('data-href');
-            }
-        </script>
-
     </div>
 </div>
 

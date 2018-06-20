@@ -2,14 +2,28 @@
 
 {% block title %}Main page{% endblock title %}
 {% block content %}
-  {% if logout_url %}
+    {% if logout_url %}
 
-    {% include "topic_list.html" %}
+        {% include "topic_list.html" %}
 
-  {% else %}
-    <div class="jumbotron">
-      <h1>Ninja Tech Forum</h1>
-      <p>Welcome to Ninja Tech Forum - the best forum for tech fans. Coming soon!</p>
-    </div>
+    {% else %}
+        <div class="jumbotron">
+            <h1>Ninja Tech Forum</h1>
+            <p>Welcome to Ninja Tech Forum - the best forum for tech fans. Coming soon!</p>
+        </div>
   {% endif %}
 {% endblock content %}
+
+{% block scripts %}
+<script language="JavaScript">
+    var clickableRows = document.querySelectorAll('.js-clickable-row');
+
+    clickableRows.forEach(function(row) {
+        row.addEventListener('click', linkToDataHref);
+        });
+
+    function linkToDataHref() {
+        window.location = this.getAttribute('data-href');
+    }
+</script>
+{% endblock scripts %}

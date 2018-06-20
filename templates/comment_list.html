@@ -20,7 +20,7 @@
                 {% if comments %}
                 {% for comment in comments %}
 
-                <tr class="clickable-row"
+                <tr class="js-clickable-row"
                     data-href="topic/{{ comment.topic_id }}/details#comment-anchor-{{ comment.key.id() }}">
                     <td class="hidden-xs hidden-sm text-muted">{{ comment.created.strftime('%d/%m/%Y, %H:%M') }}</td>
                     <td>
@@ -48,17 +48,23 @@
             </table>
         </div>
 
-         <script language="JavaScript">
-            var clickableRows = document.querySelectorAll('.clickable-row');
 
-            clickableRows.forEach(function (row) {
-                 row.addEventListener('click', makeClickable);
-                });
-
-            function makeClickable () {
-                window.location = this.getAttribute('data-href');
-            }
-        </script>
     </div>
 </div>
 {% endblock content %}
+
+{% block scripts %}
+
+<script language="JavaScript">
+    var clickableRows = document.querySelectorAll('.js-clickable-row');
+
+    clickableRows.forEach(function(row) {
+        row.addEventListener('click', linkToDataHref);
+        });
+
+    function linkToDataHref() {
+        window.location = this.getAttribute('data-href');
+    }
+
+</script>
+{% endblock scripts %}
