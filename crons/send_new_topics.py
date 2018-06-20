@@ -15,6 +15,9 @@ class SendNewTopicsCron(BaseHandler):
 
         topics_to_email = self.__prepare_new_topics()
 
+        if len(topics_to_email) == 0:
+            return None
+
         text_content, html_content = self.__prepare_content(topics_to_email)
 
         # # Uncomment for debugging.
