@@ -29,7 +29,7 @@
                         </a>
                     </td>
                     <td>
-                        {{ comment.content | truncate(240) }}
+                        {{ comment.content | truncate(240) | replace("<br>\n"," ") }}
                     </td>
                 </tr>
                 {% endfor %}
